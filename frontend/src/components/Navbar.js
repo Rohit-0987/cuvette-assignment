@@ -14,7 +14,7 @@ export default function Navbar() {
     sessionStorage.clear();
 
     // Redirect to login page
-    navigate('/login');
+    navigate('/');
 
     // Optionally refresh to ensure app state is clean
     window.location.reload();
