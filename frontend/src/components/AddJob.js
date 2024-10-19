@@ -3,8 +3,9 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import useAuth from '../customeHooks/useAuth';
 import Navbar from './Navbar';
-
+import Spinner from './Spinner'; 
 const AddJob = () => {
+    const [loading, setLoading] = useState(false); 
     useAuth()
     const [jobData, setJobData] = useState({
         title: '',
@@ -22,18 +23,22 @@ const AddJob = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('/api/jobs', jobData, {
+            setLoading(true);
+            await axios.post(`${process.env.REACT_APP_API_URL}/api/jobs`, jobData, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`,
                 },
             });
             alert('Job posted and emails sent to candidates');
+            setLoading(false);
             navigate('/dashboard');
         } catch (err) {
             console.error(err);
         }
     };
-
+    if (loading) {
+        return <Spinner />; // Show the spinner while loading
+      }
     return (
         <>
         <Navbar/>

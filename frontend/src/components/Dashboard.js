@@ -13,7 +13,7 @@ const Dashboard = () => {
     useEffect(() => {
         const fetchJobs = async () => {
             try {
-                const res = await axios.get('/api/jobs', {
+                const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/jobs`, {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`,
                     },

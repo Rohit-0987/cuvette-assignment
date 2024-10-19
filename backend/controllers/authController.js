@@ -23,23 +23,25 @@ exports.register = async (req, res) => {
         const emailOtp = Math.floor(100000 + Math.random() * 900000); // For email
 
         // Create new user
+        const formattedPhone = phone.startsWith('+91') ? phone : `+91${phone}`;
+
         user = await User.create({
-            name, phone, companyName, companyEmail, employeeSize, password, otp,emailOtp
+            name, phone: formattedPhone, companyName, companyEmail, employeeSize, password, otp, emailOtp
         });
 
         // Send OTP via SMS (Twilio)
         await client.messages.create({
             body: `Your OTP is ${otp}`,
             from: process.env.TWILIO_PHONE,
-            to: phone
+            to: formattedPhone // Send OTP to the formatted phone number with +91
         });
         const emailOptions = {
             email: companyEmail,
             subject: 'OTP Verification',
             message: `Your OTP for verification is ${emailOtp}.`,
         };
-        
-        
+
+
         await sendEmail(emailOptions.email, emailOptions.subject, emailOptions.message);
         res.status(200).json({ message: "OTP sent successfully", userId: user._id });
     } catch (error) {

@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import Navbar from './Navbar';
-
+import Spinner from './Spinner'; 
 const Register = () => {
+    const [loading, setLoading] = useState(false); 
     const [formData, setFormData] = useState({
         name: '',
         phone: '',
@@ -21,18 +22,23 @@ const Register = () => {
     const handleRegister = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('/api/auth/register', formData);
+            setLoading(true);
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/register`, formData);
             const userId = response.data.userId; // Get the userId from response
             localStorage.setItem('userId', userId); // Store userId in localStorage
+            setLoading(false);
             navigate('/verify-otp'); // Navigate to OTP verification page
         } catch (error) {
             console.error('Error during registration', error);
         }
     };
+    if (loading) {
+        return <Spinner />; // Show the spinner while loading
+      }
     return (
         <div>
             <Navbar />
-
+            
             <div className='flex flex-col md:flex-row justify-evenly h-screen items-center px-4 md:px-0'>
                 <div className='w-full md:w-1/2 p-4'>
                     <p className='text-gray-700 text-lg'>

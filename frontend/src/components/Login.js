@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import Navbar from './Navbar';
-
+import Spinner from './Spinner';
 const Login = () => {
+    const [loading, setLoading] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -11,14 +12,15 @@ const Login = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-    
         try {
+            setLoading(true);
             const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/login`, {
                 email, 
                 password
             });
     
             localStorage.setItem('token', res.data.token); // Store JWT token in localStorage
+            setLoading(false);
             navigate('/dashboard'); // Redirect to dashboard after successful login
         } catch (err) {
             console.error(err);
@@ -26,7 +28,9 @@ const Login = () => {
         }
     };
     
-
+    if (loading) {
+        return <Spinner />; // Show the spinner while loading
+      }
     return (
         <>
             <Navbar/>
