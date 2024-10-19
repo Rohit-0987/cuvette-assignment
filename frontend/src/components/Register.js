@@ -12,7 +12,6 @@ const Register = () => {
         employeeSize: '',
         password: ''
     });
-    const [userId, setUserId] = useState(null);
     const navigate = useNavigate();
 
     const handleChange = (e) => {

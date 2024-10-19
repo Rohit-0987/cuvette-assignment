@@ -30,21 +30,6 @@ const Dashboard = () => {
         fetchJobs();
     }, [navigate]);
 
-    // Logout function to clear the token
-    const handleLogout = () => {
-        // Remove token and other related data
-        localStorage.removeItem('token');
-        localStorage.clear(); // Optionally clear all local storage items
-
-        // Optionally clear session storage or other storage
-        sessionStorage.clear();
-
-        // Navigate to login page
-        navigate('/login');
-
-        // Optionally refresh the page to ensure full logout
-        window.location.reload();
-    };
 
     return (
         <div className="min-h-screen bg-gray-100 p-6">
